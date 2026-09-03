@@ -5,6 +5,10 @@
 *.env.*.local
 .env.*
 
+# But always track the example file
+!.env.example
+!**/.env.example
+
 # Compiled / Build outputs
 **/target/
 **/build/

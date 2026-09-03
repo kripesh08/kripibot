@@ -14,43 +14,46 @@ A production-ready conversational AI chatbot built with **Java Spring Boot 3**, 
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Quick Start Guide (Local Dev)
 
-### 1. Backend Setup (Spring Boot)
+> **Prerequisites:** Java 21, Maven, Node.js, and PostgreSQL installed locally.
 
-1. Open `backend/src/main/resources/application.yml` and check your PostgreSQL credentials:
-   ```yaml
-   spring:
-     datasource:
-       url: jdbc:postgresql://localhost:5432/postgres
-       username: postgres
-       password: your_postgres_password
+### 1. Configure environment variables
+
+1. Copy the example env file:
+   ```bash
+   cp backend/.env.example backend/.env
    ```
-2. Set your Google Gemini API Key (get a free key from [Google AI Studio](https://aistudio.google.com/app/apikey)):
-   - Either in `backend/src/main/resources/application.yml` under `gemini.api.key`
-   - Or export it in your terminal:
-     ```powershell
-     $env:GEMINI_API_KEY="your-gemini-api-key"
-     ```
-   - Or simply enter it in the frontend UI Settings modal!
-3. Run the backend:
-   ```powershell
-   cd backend
-   mvn spring-boot:run
+2. Edit `backend/.env` with your values:
+   ```env
+   DB_URL=jdbc:postgresql://localhost:5432/your_database_name
+   DB_USERNAME=your_postgres_username
+   DB_PASSWORD=your_postgres_password
+   GEMINI_API_KEY=your_gemini_api_key
+   GEMINI_MODEL=gemini-2.5-flash
    ```
-   Backend runs on `http://localhost:8080`.
+   > Get a free Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+### 2. Run the backend
+
+```powershell
+cd backend
+mvn spring-boot:run
+```
+
+Backend runs on `http://localhost:8081`.
 
 ---
 
-### 2. Frontend Setup (React + Vite)
+### 3. Run the frontend
 
-1. Install dependencies & start the dev server:
-   ```powershell
-   cd frontend
-   npm install
-   npm run dev
-   ```
-2. Open `http://localhost:5173` in your browser.
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173` in your browser.
 
 ---
 
