@@ -54,6 +54,89 @@ A production-ready conversational AI chatbot built with **Java Spring Boot 3**, 
 
 ---
 
+## 🐳 Running with Docker
+
+The easiest way to run KripiBot on any machine — no need to install Java, Maven, or Node.js.
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/kripesh08/kripibot.git
+cd kripibot
+```
+
+### 2. Create your `.env` file
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your real values:
+
+```env
+DB_USERNAME=postgres
+DB_PASSWORD=your_db_password
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+> Get a free Gemini API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+### 3. Start everything
+
+```bash
+docker compose up -d
+```
+
+This will automatically:
+- Pull PostgreSQL from Docker Hub
+- Build the Spring Boot backend image
+- Build the React/Nginx frontend image
+- Start all 3 containers wired together
+
+### 4. Open the app
+
+| Service | URL |
+|---------|-----|
+| 🌐 Frontend | **http://localhost:3000** |
+| 🔌 Backend API | http://localhost:8081 |
+
+### Useful commands
+
+```bash
+# View running containers
+docker compose ps
+
+# View live logs
+docker compose logs -f
+
+# Stop everything
+docker compose down
+
+# Stop and delete the database volume (fresh start)
+docker compose down -v
+
+# Rebuild images after code changes
+docker compose build
+docker compose up -d
+```
+
+### Want to skip building? Use pre-built images from Docker Hub
+
+```bash
+# Pull pre-built images (faster — no compilation needed)
+docker compose pull
+docker compose up -d
+```
+
+Pre-built images: [`kripi08/kripibot-backend`](https://hub.docker.com/r/kripi08/kripibot-backend) · [`kripi08/kripibot-frontend`](https://hub.docker.com/r/kripi08/kripibot-frontend)
+
+---
+
 ## 📁 Project Architecture
 
 ```

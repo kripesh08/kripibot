@@ -1,0 +1,66 @@
+services:
+
+  # ── PostgreSQL Database ────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: kripibot-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: kripibot_db
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kripibot-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d kripibot_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Spring Boot Backend ────────────────────────────────────────────────────
+  backend:
+    image: kripi08/kripibot-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kripibot-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/kripibot_db
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: ${GEMINI_MODEL}
+    ports:
+      - "8081:8081"
+    networks:
+      - kripibot-net
+
+  # ── React / Nginx Frontend ─────────────────────────────────────────────────
+  frontend:
+    image: kripi08/kripibot-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kripibot-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - kripibot-net
+
+# ── Volumes ────────────────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+
+# ── Networks ──────────────────────────────────────────────────────────────
+networks:
+  kripibot-net:
+    driver: bridge
